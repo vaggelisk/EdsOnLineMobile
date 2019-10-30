@@ -1,19 +1,23 @@
 <template>
-  <v-container fluid grid-list-md fill-height style="padding:0px 10px 5px 10px;width:100%;">
-    <v-layout row v-if="userLogged">
-        <v-flex d-flex md6>
-            <v-layout column fill-height style="overflow:auto;">
+  <v-container fluid style="padding:0px 10px 5px 10px;background-color: rgb(244,244,244)" >
+  <!--<v-container fluid grid-list-md fill-height style="padding:0px 10px 5px 10px;width:100%;height:100%">-->
+    <v-layout column v-if="userLogged">
+        <v-flex style="height: 300px">
+            <!--<v-layout >-->
+            <Map
+                v-if="mapData[vesselList[vesselList.length-1].name]"
+                v-bind:points="mapData[vesselList[vesselList.length-1].name]"
+                v-bind:zoom="2"/>
+            <!--</v-layout>-->
+        </v-flex>
+
+        <v-flex>
+            <v-layout >
                 <DashboardCard
-                    v-for="vessel in vesselList" :key="vessel"
-                    v-bind:cardData="cardData[vessel.name]">
+                        v-for="vessel in vesselList" :key="vessel"
+                        v-bind:cardData="cardData[vessel.name]">
                 </DashboardCard>
             </v-layout>
-        </v-flex>
-        <v-flex d-flex md6>
-            <Map     
-                v-if="mapData[vesselList[vesselList.length-1].name]"            
-                v-bind:points="mapData[vesselList[vesselList.length-1].name]" 
-                v-bind:zoom="2"/>
         </v-flex>
     </v-layout>
   </v-container>
@@ -63,21 +67,21 @@ export default {
             }, 600);
         }
         catch(err)
-        {     
-            console.log('error '+err);        
+        {
+            console.log('error '+err);
             setTimeout(() => {
                 this.setDatawDashData();
-            }, 600);   
+            }, 600);
         }
     },
     methods: {
         setDatawDashData()
-        {            
+        {
             for(let v=0;v<this.vesselList.length;v++)
             {
                 let vessel = this.vesselList[v];
                 let vessDash = globalStore.dashboard[vessel.name];
-                
+
                 var cardDict={};
 
                 this.$set(cardDict, 'name', vessel.name);
@@ -98,7 +102,7 @@ export default {
                     });
                 }
 
-                params=['ME_Power_perc','ensp','STW'];              
+                params=['ME_Power_perc','ensp','STW'];
 
                 for (let p=0;p<params.length;p++)
                 {
@@ -121,10 +125,10 @@ export default {
                 {
                     if (vessDash['engineState']==-1000) nvg=false;
                 }
-                else 
+                else
                 {
                     if ((stateText!='Running')&&(stateText!='Slowdown')) nvg= false;
-                }  
+                }
 
                 this.$set(cardDict,'engineState',{
                     label:'Engine State',
@@ -165,7 +169,7 @@ export default {
                         verticalAlign: 'bottom',
                         layout: 'horizontal', },
                     title:{ text:undefined },
-                    xAxis: { 
+                    xAxis: {
                         labels:{ enabled:false},
                         crosshair:true
                     },
@@ -248,7 +252,7 @@ export default {
                         verticalAlign: 'bottom',
                         layout: 'horizontal', },
                     title:{ text:undefined },
-                    xAxis: { 
+                    xAxis: {
                         labels:{ enabled:false},
                         crosshair:true
                     },
@@ -316,7 +320,7 @@ export default {
 
                 this.$set(cardDict.sloc,'chartOptions', {
                     credits:{enabled:false},
-                    chart:{ backgroundColor:'transparent'},                
+                    chart:{ backgroundColor:'transparent'},
                     tooltip:{
                         formatter: function () {
                             return this.points.reduce(function (s, point) {
@@ -331,7 +335,7 @@ export default {
                         verticalAlign: 'bottom',
                         layout: 'horizontal', },
                     title:{ text:undefined },
-                    xAxis: { 
+                    xAxis: {
                         labels:{ enabled:false},
                         crosshair:true
                     },
@@ -373,12 +377,12 @@ export default {
                 // {
                 var points= [];
 
-                let currDate = vessDash.date.slice(0,10);      
+                let currDate = vessDash.date.slice(0,10);
 
                 params=['ME_Power_perc','ensp','STW'];
-                let html ='<b>'+currDate+' '+vessel.name+'</b><br>';           
+                let html ='<b>'+currDate+' '+vessel.name+'</b><br>';
 
-        
+
                 for (let p=0;p<params.length;p++)
                 {
                     if (vessDash[params[p]]!=-1000)
@@ -387,7 +391,7 @@ export default {
                         html += globalStore.mapping[params[p]]+': '+  (vessDash['load']*100).toFixed(2)+' ['+globalStore.units[params[p]]+']<br>';
                     else html += globalStore.mapping[params[p]]+': - ['+globalStore.units[params[p]]+']<br>';
                 }
-        
+
                 html +='Faults: '+vessDash['Faults'];
 
                 points.push({
@@ -396,22 +400,22 @@ export default {
                     'color':0,
                     'html':html,
                     'status':stateText,
-                    'vessel':vessel.name, 
+                    'vessel':vessel.name,
                     'imo' :vessel.imo
-                });  
+                });
 
 
                 //let now = new Date(globalStore.dashboard.date);
                 let dates = Object.keys(globalStore.mapData[vessel.name]);
 
                 for (let i=dates.length-1;i>=0;i--)
-                {                
-                    let currDate = dates[i];//now.toISOString().substring(0,10);       
-                                        
+                {
+                    let currDate = dates[i];//now.toISOString().substring(0,10);
+
                     let temp = globalStore.mapData[vessel.name][currDate];
 
                     html ='<b>'+currDate+' '+vessel.name+'</b><br>';
-            
+
                     for (let p=0;p<params.length;p++)
                     {
                         if (temp[params[p]]!=-1000)
@@ -420,7 +424,7 @@ export default {
                             html += globalStore.mapping[params[p]]+': '+  (temp['load']*100).toFixed(2)+' ['+globalStore.units[params[p]]+']<br>';
                         else html += globalStore.mapping[params[p]]+': - ['+globalStore.units[params[p]]+']<br>';
                     }
-            
+
                     html +='Faults: '+temp['Faults'];
 
                     points.push({
@@ -429,9 +433,9 @@ export default {
                         'color':temp['mapColor'],
                         'html':html,
                         'status':'running',
-                        'vessel':vessel.name, 
+                        'vessel':vessel.name,
                         'imo' :vessel.imo
-                    });               
+                    });
 
                 }
                 //console.log(points);
@@ -447,11 +451,11 @@ export default {
                 else this.$set(cardDict, 'engineKPI',kpi.toFixed(0));
 
                 this.$set(this.cardData,vessel.name,cardDict);
-            }           
+            }
 
             document.body.style.cursor = 'default';
 
-        },    
+        },
         average: function(param, count, data, timestamp)
         {
             let sum =0;
@@ -483,7 +487,7 @@ export default {
         //                 if (sel.length>0)
         //                 {
         //                     for (let s=0;s<sel.length;s++)
-        //                         globalStore.alerts.push({                    
+        //                         globalStore.alerts.push({
         //                             Id:sel[s].Id,
         //                             Vessel:notif[i].faultVessel,
         //                             Engine:notif[i].faultEngine,
@@ -493,17 +497,17 @@ export default {
         //                             Date:notif[i].faultDatetime.date
         //                         });
 
-        //                 }                
+        //                 }
         //             }
         //         })
 
-        //     }            
+        //     }
 
         // }
     },
     watch: {
         dataLoaded : function()
-        {            
+        {
            try
             {
                 setTimeout(() => {
@@ -511,11 +515,11 @@ export default {
                 }, 600);
             }
             catch(err)
-            {     
-                console.log('error '+err);        
+            {
+                console.log('error '+err);
                 setTimeout(() => {
                     this.setDatawDashData();
-                }, 600);   
+                }, 600);
             }
         }
     }

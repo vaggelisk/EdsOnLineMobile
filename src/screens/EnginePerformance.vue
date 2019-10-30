@@ -7,32 +7,32 @@
       <EngineParameters
         v-bind:active="tabActive[0]"/>
     </v-tab-item>
-    <v-tab-item class="tabItem">
-      <EngineGraphs
-        v-bind:active="tabActive[1]"/>
-    </v-tab-item>
-    <v-tab-item  v-if="showAdditional" class="tabItem">
-      <EnginePerformanceTable
-        v-bind:active="tabActive[2]"/>
-    </v-tab-item>
-    <v-tab-item  v-if="showAdditional" class="tabItem">
-      <EnginePerformanceCurves
-        v-bind:active="tabActive[3]"/>
-    </v-tab-item>
-    <v-tab-item v-if="showAdditional" class="tabItem">
-      <TuningCharts
-        v-bind:active="tabActive[4]"/>
-    </v-tab-item>
-    <v-tab-item class="tabItem">
-      <EngineRaw
-        v-bind:active="tabActive[2+addTab]"/>
-    </v-tab-item>
-    <v-tab-item class="tabItem">
-      <OperationalGraphs
-        v-bind:active="tabActive[3+addTab]"/>
-    </v-tab-item>
+    <!--<v-tab-item class="tabItem">-->
+      <!--<EngineGraphs-->
+        <!--v-bind:active="tabActive[1]"/>-->
+    <!--</v-tab-item>-->
+    <!--<v-tab-item  v-if="showAdditional" class="tabItem">-->
+      <!--<EnginePerformanceTable-->
+        <!--v-bind:active="tabActive[2]"/>-->
+    <!--</v-tab-item>-->
+    <!--<v-tab-item  v-if="showAdditional" class="tabItem">-->
+      <!--<EnginePerformanceCurves-->
+        <!--v-bind:active="tabActive[3]"/>-->
+    <!--</v-tab-item>-->
+    <!--<v-tab-item v-if="showAdditional" class="tabItem">-->
+      <!--<TuningCharts-->
+        <!--v-bind:active="tabActive[4]"/>-->
+    <!--</v-tab-item>-->
+    <!--<v-tab-item class="tabItem">-->
+      <!--<EngineRaw-->
+        <!--v-bind:active="tabActive[2+addTab]"/>-->
+    <!--</v-tab-item>-->
+    <!--<v-tab-item class="tabItem">-->
+      <!--<OperationalGraphs-->
+        <!--v-bind:active="tabActive[3+addTab]"/>-->
+    <!--</v-tab-item>-->
   </v-tabs>
-  
+
 
 </template>
 
@@ -41,7 +41,7 @@
   import EngineParameters  from "./EngineParameters"
   import EngineRaw      from "./EngineRaw"
   import OperationalGraphs         from "./OperationalGraphs"
-  
+
   import EnginePerformanceCurves  from "./EnginePerformanceCurves"
   import EnginePerformanceTable  from "./EnginePerformanceTable"
   import TuningCharts  from "./TuningCharts"
@@ -68,12 +68,13 @@
       return {
         active: parseInt( this.$route.query.tab ),
         tabActive:[false,false,false,false,false,false,false,false,false],
-        tabTitles:['Performance Parameters','Performance Graphs', 'Performance Data Table','Data Curves ISO', 'Tunings', 'Raw Data', 'Operational Graphs'],
-        addTab:3   
+        // tabTitles:['Performance Parameters','Performance Graphs', 'Performance Data Table','Data Curves ISO', 'Tunings', 'Raw Data', 'Operational Graphs'],
+        tabTitles:['Performance Parameters'],
+        addTab:3
       }
     },
-    created() {     
-     
+    created() {
+
       this.tabActive[ parseInt( this.$route.query.tab )] = true;
 
       if (!this.showAdditional)
@@ -85,8 +86,8 @@
           let index = this.tabTitles.indexOf(forDel[i]);
 
           this.tabTitles.splice(index,1);
-          this.tabActive.splice(index,1);  
-        }        
+          this.tabActive.splice(index,1);
+        }
 
         this.addTab=0;
       }
@@ -109,7 +110,7 @@
       }
     },
     computed: {
-      showAdditional: function () 
+      showAdditional: function ()
       {
         // console.log(globalStore.userProfile.roles);
         if (globalStore.userProfile.roles.includes('ROLE_WINGD_USER')) return true;

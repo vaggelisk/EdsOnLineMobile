@@ -1,55 +1,48 @@
 <template>
-   <v-container fluid fill-height grid-list-md style="padding:0px 10px 5px 10px;width:100%;">
-    <v-layout row v-show="load">
-       <v-flex d-flex md3>
-           <VesselInfo
-                v-bind:vesselData="vesselData"/>
-       </v-flex>       
-       <v-flex d-flex md9>
-            <v-layout column fill-height>
-                <v-flex d-flex md6  style="max-height:50%;">
-                    <v-layout row>
-                        <v-flex d-flex md3>
-                             <v-card flat fill-height style="height:100%;width:100%;">
-                                <v-card-actions fill-height style="height:100%;padding:0px;">   
-                                    <v-layout column fill-height>
-                                        <v-flex d-flex md6  style="padding:0px;">
+   <v-container fluid  grid-list-md style="background-color: rgb(244,244,244)">
+    <v-layout column  v-show="load">
+       <v-flex >
+            <v-layout  >
+                <v-flex  >
+                    <v-layout column>
+                        <v-flex  >
+                             <v-card >
+                                <v-card-actions >
+                                    <v-layout column >
+                                        <v-flex style="padding:0px;">
                                             <Gauge
                                                 v-bind:data="gaugeData['ensp']"/>
                                         </v-flex>
-                                        <v-flex d-flex md6 style="padding:0px;">                                            
+                                        <v-flex  style="padding:0px;">
                                             <Gauge
                                                 v-bind:data="gaugeData['load']"/>
                                         </v-flex>
-                                    </v-layout>                                    
+                                    </v-layout>
                                 </v-card-actions>
                             </v-card>
                         </v-flex>
-                        <v-flex d-flex md3>
+                        <v-flex >
                             <EngineState
                                 v-bind:data="engineData"/>
                         </v-flex>
-                        <v-flex d-flex md6>
+                        <v-flex>
                             <SubsystemState
                                 v-bind:data="subSystemData"/>
                         </v-flex>
-                    </v-layout>
-                </v-flex>
-                <v-flex d-flex md6  style="max-height:50%;">
-                    <v-layout row>
-                        <v-flex d-flex md6>
+
+                        <v-flex >
                             <PerformanceWidget
-                                v-bind:cardData="cardData"                                
+                                v-bind:cardData="cardData"
                                 v-bind:gaugeData="gaugeData"/>
                         </v-flex>
-                        <v-flex d-flex md6>
-                            <FaultsWidget
-                                v-bind:navigation="true"/>
-                        </v-flex>
+                        <!--<v-flex >-->
+                            <!--<FaultsWidget-->
+                                <!--v-bind:navigation="true"/>-->
+                        <!--</v-flex>-->
                     </v-layout>
                 </v-flex>
             </v-layout>
-       </v-flex>    
+       </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -67,7 +60,7 @@ import {globalStore} from "../main.js"
 
 export default {
   name: "VesselView",
-  components: { 
+  components: {
       VesselInfo,
       SubsystemState,
       EngineState,
@@ -76,34 +69,34 @@ export default {
       Gauge
    },
    data: function () {
-        return {  
-            cardData:{}, 
-            subSystemData:[], 
+        return {
+            cardData:{},
+            subSystemData:[],
             engineData:{
                 cylinders:[],
                 elements:[],
                 engineKPI:0,
-                engineColor:0    
+                engineColor:0
             },
             gaugeData:{},
             vesselData:{},
             load:false
         }
-    },    
+    },
     mounted() {
         try
-        {            
+        {
             setTimeout(() => {
-                this.setData();}, 600);   
+                this.setData();}, 600);
         }
         catch(err)
-        {   
-            console.log('error '+err);          
+        {
+            console.log('error '+err);
             setTimeout(() => {
-                this.setData();}, 600);   
+                this.setData();}, 600);
         }
-                   
- 
+
+
     },
     methods:
     {
@@ -112,26 +105,26 @@ export default {
             let sum =0;
 
             for (let i=1;i<=count;i++)
-            {   
+            {
                 if (data[timestamp][param+i]!=-1000) sum+=data[timestamp][param+i];
                 else count--;
             }
 
-            
+
             if ((sum==0)||(count==0)) return -1000;
             else return sum/count;
-        }, 
+        },
         setData()
-        {        
+        {
             this.load = false;
 
             let refLength = Object.keys(globalStore.reference).length;
             let sigLength = Object.keys(globalStore.signals).length;
-            
+
             var temp ;
-            
+
             if (refLength>sigLength) temp = Object.keys(globalStore.signals);
-            else temp = Object.keys(globalStore.reference);            
+            else temp = Object.keys(globalStore.reference);
 
             let timestamp = temp[temp.length-1];
 
@@ -166,7 +159,7 @@ export default {
                     format:2
                 });
             }
-            
+
             params=['ME_Torque_perc','ME_Power_perc','ensp','STW','SOG','Slip_STW','Slip_SOG' ,'COG','Wind_Speed','Wind_direction_relative','Water_Depth','Rudder_angle'];
 
             for (let p=0;p<params.length;p++)
@@ -188,12 +181,12 @@ export default {
 
             if (timeStamps.indexOf('average')>-1)
                 timeStamps.splice(timeStamps.indexOf('average'),1);
-            
 
-            
+
+
             params=['ME_Power_perc','ensp','STW'];
 
-            for (let i=0;i<timeStamps.length;i++) 
+            for (let i=0;i<timeStamps.length;i++)
             {
                 if ( globalStore.signals[timeStamps[i]]['LON']!=-1000)
                 {
@@ -204,8 +197,8 @@ export default {
                 }
             }
 
-            this.$set(this.vesselData,'points',[]);          
-            
+            this.$set(this.vesselData,'points',[]);
+
             if(globalStore.signals[last]['LAT']!=-1000)
             {
                 let html ='<b>'+last+' '+globalStore.selectedVessel+'</b><br>';
@@ -218,7 +211,7 @@ export default {
                         html += globalStore.mapping[params[p]]+': '+  (globalStore.signals[last]['load']*100).toFixed(2)+' ['+globalStore.units[params[p]]+']<br>';
                     else html += globalStore.mapping[params[p]]+': - ['+globalStore.units[params[p]]+']<br>';
                 }
-                
+
                 html +='Faults: 0<br>Tickets: -'
 
                 this.vesselData['points'].push({
@@ -226,14 +219,14 @@ export default {
                     'html':html
                 });
             }
-            
+
             this.$set(this.vesselData,'showMap',true);
 
             //KPIs
-            
+
             let cylCount =6;
             let tcCount =1;
-            
+
             if (globalStore.selectedVessel!='Energy Triumph') tcCount =2;
 
             this.$set(this.engineData, 'engineColor',globalStore.reference[timestamp]['eng_KPI_color']);
@@ -256,15 +249,15 @@ export default {
             for (let el=0;el<names.length;el++)
             {
                 let sum=0;
-                
+
                 for (let t=1;t<=tcCount;t++)
                 {
-                    sum+=globalStore.reference[timestamp][tags[el]+t+'_KPI_color'];   
+                    sum+=globalStore.reference[timestamp][tags[el]+t+'_KPI_color'];
                 }
 
                 this.engineData.elements.push({
                             name:names[el],
-                            color:sum/tcCount});           
+                            color:sum/tcCount});
             }
 
             this.subSystemData=[];
@@ -326,19 +319,19 @@ export default {
             params=['pcomp', 'pmax','tcspeed', 'tTurbIn','pscav','bsfc'];
             let refs = ['pcomp', 'pmax','tcspeed', 'tTurbIn','pscav','bsfc'];
             let elCount=[cylCount,cylCount, tcCount,tcCount, 0,0];
-            
+
             for (let p=0;p<params.length;p++)
             {
                 let val, rfr;
 
                 if (elCount[p]>0)
                     val = this.average(params[p], elCount[p], globalStore.signals, timestamp);
-                else 
+                else
                     val = globalStore.signals[timestamp][params[p]];
-                
+
                  if (elCount[p]>0)
                     rfr = this.average(refs[p], elCount[p], globalStore.reference, timestamp);
-                else 
+                else
                     rfr = globalStore.reference[timestamp][refs[p]];
 
                 let color =-10;
@@ -360,46 +353,46 @@ export default {
                     unit:globalStore.units[params[p]],
                     format:2,
                     color:color
-                }); 
-            }   
-            
+                });
+            }
+
             this.load = true;
         }
     },
     computed: {
-        dataLoaded: function () { return globalStore.type; },      
+        dataLoaded: function () { return globalStore.type; },
         selVessel: function () { return globalStore.selectedVessel; }
     },
     watch: {
         dataLoaded : function()
         {
            try
-            {            
+            {
                 setTimeout(() => {
-                    this.setData();}, 600);   
+                    this.setData();}, 600);
             }
             catch(err)
-            {     
-                console.log('error '+err);        
+            {
+                console.log('error '+err);
                 setTimeout(() => {
-                    this.setData();}, 600);   
+                    this.setData();}, 600);
             }
-                   
+
         },
         selVessel : function()
         {
             try
-            {            
+            {
                 setTimeout(() => {
-                    this.setData();}, 600);   
+                    this.setData();}, 600);
             }
             catch(err)
-            {      
-                console.log('error '+err);      
+            {
+                console.log('error '+err);
                 setTimeout(() => {
-                    this.setData();}, 600);   
+                    this.setData();}, 600);
             }
-                   
+
         }
     }
 

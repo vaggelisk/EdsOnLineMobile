@@ -4,7 +4,7 @@
             <v-layout row fill-height>
                 <v-flex d-flex md6>
                     <v-layout column>
-                        <img  width="280" :src="require('../assets/EDIbWLyb.jpg')" alt="">
+                        <!--<img  width="280" :src="require('../assets/EDIbWLyb.jpg')" alt="">-->
                         <v-flex d-flex md4>
                             <v-card flat style="margin-right:100px;">
                                 <v-card-title>
@@ -56,10 +56,10 @@
                     </v-layout>
 
                 </v-flex>
-                <v-flex d-flex md6>
-                    <img :src="require('../assets/EDS online login page.png')"  style="width:100%;height:100%;"  alt="">
+                <!--<v-flex d-flex md6>-->
+                    <!--<img :src="require('../assets/EDS online login page.png')"  style="width:100%;height:100%;"  alt="">-->
 
-                </v-flex>
+                <!--</v-flex>-->
             </v-layout>
         </v-container>
     </v-card>

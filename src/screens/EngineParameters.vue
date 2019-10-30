@@ -1,113 +1,29 @@
 <template>
-  <v-container ref="pdfContent" fluid fill-height grid-list-md style="padding:0px 10px 5px 10px;width:100%;height:100%;background-color:white;">
-    <v-layout row>
-      <v-flex d-flex md6>
-        <v-layout column fill-height>
-          <v-flex d-flex md3 style="max-height:25%;">
-            <v-layout row>
-                <v-flex d-flex md4>
-                    <Card
-                        v-bind:cardData="cardData['pcomp']"
-                        v-bind:flat="false"/>
-                </v-flex>
-                <v-flex d-flex md4>
-                    <Card
-                        v-bind:cardData="cardData['pmax']"
-                        v-bind:flat="false"/>
-                </v-flex>
-                <v-flex d-flex md4>
-                    <Card
-                        v-bind:cardData="cardData['pmaxPcomp']"
-                        v-bind:flat="false"/>
-                </v-flex>
-            </v-layout>
-          </v-flex>
-          <v-flex d-flex md3 style="max-height:25%;">
+  <v-container ref="pdfContent" fluid fill-height grid-list-md style="padding:0px 10px 5px 10px;width:100%;background-color:white;">
+    <v-layout >
+      <v-flex d-flex >
+        <v-layout column >
+
+          <v-flex d-flex md3 style="max-height:50%;">
             <BarChart
               v-if="chartData['pcomp']"
               v-bind:active="active"
               v-bind:chartOptions="chartData['pcomp']"
               v-bind:title="titles['pcomp']"/>
           </v-flex>
-          <v-flex d-flex md3 style="max-height:25%;">
+          <v-flex d-flex md3 style="max-height:100%;">
             <BarChart
               v-if="chartData['pmax']"
               v-bind:active="active"
               v-bind:chartOptions="chartData['pmax']"
               v-bind:title="titles['pmax']"/>
           </v-flex>
-          <v-flex d-flex md3 style="max-height:25%;">
+          <v-flex d-flex md3 style="max-height:20%;">
             <BarChart
               v-if="chartData['tExhC']"
               v-bind:active="active"
               v-bind:chartOptions="chartData['tExhC']"
               v-bind:title="titles['tExhC']"/>
-          </v-flex>
-        </v-layout>
-      </v-flex>
-      <v-flex d-flex md6>
-        <v-layout column fill-height>
-          <v-flex d-flex md3 style="max-height:25%;">
-            <v-layout row>
-                <v-flex d-flex md4>
-                    <Card
-                        v-bind:cardData="cardData['tcspeed']"
-                        v-bind:flat="false"/>
-                </v-flex>
-                <v-flex d-flex md4>
-                    <Card
-                        v-bind:cardData="cardData['pscav']"
-                        v-bind:flat="false"/>
-                </v-flex>
-                <v-flex d-flex md4>
-                    <Card
-                        v-bind:cardData="cardData['tscav']"
-                        v-bind:flat="false"/>
-                </v-flex>
-            </v-layout>
-          </v-flex>
-          <v-flex d-flex md3 style="max-height:25%;">
-            <v-layout row>
-                <v-flex d-flex md4>
-                    <Card
-                        v-bind:cardData="cardData['tTurbIn']"
-                        v-bind:flat="false"/>
-                </v-flex>
-                <v-flex d-flex md4>
-                    <Card
-                        v-bind:cardData="cardData['tTurbO']"
-                        v-bind:flat="false"/>
-                </v-flex>
-                <v-flex d-flex md4>
-                    <Card
-                        v-bind:cardData="cardData['tliner']"
-                        v-bind:flat="false"/>
-                </v-flex>
-            </v-layout>
-          </v-flex>
-          <v-flex d-flex md6 style="max-height:50%;">
-            <v-layout row style="height:100%;margin:0px;">
-              <v-flex d-flex md4 style="padding:0px;">
-                <v-layout column fill-height style="height:100%;margin:0px;">
-                   <v-flex d-flex md6>
-                      <Card
-                          v-bind:cardData="cardData['fRailPres']"
-                          v-bind:flat="false"/>
-                    </v-flex>
-                    <v-flex d-flex md6>
-                      <Card
-                          v-bind:cardData="cardData['soPresDispl']"
-                          v-bind:flat="false"/>
-                    </v-flex>
-                </v-layout>
-              </v-flex>
-              <v-flex d-flex md8 >
-                <LoadDiagram
-                    v-if="active"
-                  v-bind:active="active"
-                  v-bind:chartData="loadDiagram" />
-              </v-flex>
-            </v-layout>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -165,17 +81,17 @@ export default {
       let cylCount=6;
       let tcCount=1;
 
-      
+
       if (globalStore.selectedVessel!='Energy Triumph') tcCount =2;
 
       let refLength = Object.keys(globalStore.reference).length;
       let sigLength = Object.keys(globalStore.signals).length;
-      
+
       var temp ;
-      
+
       if (refLength>sigLength) temp = Object.keys(globalStore.signals);
-      else temp = Object.keys(globalStore.reference);            
-  
+      else temp = Object.keys(globalStore.reference);
+
       let timestamp = temp[temp.length-1];
 
       let params=['pcomp', 'pmax', 'pmaxPcomp','tcspeed', 'tscav','tTurbO','tTurbIn','pscav','soPresDispl','fRailPres'];
@@ -470,14 +386,14 @@ export default {
 
       let refLength = Object.keys(globalStore.reference).length;
       let sigLength = Object.keys(globalStore.signals).length;
-      
+
       let mcr =    globalStore.loadDiagram['otVal1'];
-      
+
       var temp ;
-      
+
       if (refLength>sigLength) temp = Object.keys(globalStore.signals);
-      else temp = Object.keys(globalStore.reference);            
-  
+      else temp = Object.keys(globalStore.reference);
+
       let timestamp = temp[temp.length-1];
 
       if (globalStore.signals[timestamp]['ensp']!=-1000)
@@ -489,7 +405,7 @@ export default {
             this.loadDiagram.series[0].data =[[globalStore.signals[timestamp]['ensp'],globalStore.signals[timestamp]['ME_Power_kW']]];
         else  if (globalStore.signals[timestamp]['load']!=-1000)
             this.loadDiagram.series[0].data =[[globalStore.signals[timestamp]['ensp'],globalStore.signals[timestamp]['load']*mcr]];
-        
+
 
         if (globalStore.reference[timestamp]['shaftP']!=-1000)
             this.loadDiagram.series[1].data =[[globalStore.signals[timestamp]['ensp'],globalStore.reference[timestamp]['shaftP']]];
@@ -497,7 +413,7 @@ export default {
             this.loadDiagram.series[0].data =[[globalStore.signals[timestamp]['ensp'],globalStore.reference[timestamp]['ME_Power_kW']]];
         else  if (globalStore.reference[timestamp]['load']!=-1000)
             this.loadDiagram.series[0].data =[[globalStore.signals[timestamp]['ensp'],globalStore.reference[timestamp]['load']*mcr]];
-          
+
       }
 
       this.loadDiagram.series[2].data=[];

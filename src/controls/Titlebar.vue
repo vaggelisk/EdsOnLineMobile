@@ -1,14 +1,12 @@
 <template>
     <v-toolbar fixed flat id="titleBar" :height=40 style="top:60px;">
-        <div v-show="showBreadCrumb" v-for="(item,index) in breadCrumbList" v-bind:key="item">        
-            <div class="titleBtn" v-if="index>0">></div>
-            <!-- <v-btn flat class="titleBtn" v-if="screensForBack.includes(item)" v-on:click="goBack()">
-                <v-icon dark left>arrow_back</v-icon>Back
-            </v-btn> -->
-            <v-btn flat class="titleBtn" v-show="userLogged" v-if="item=='Vessel View'" v-on:click="navTo(item)">{{selVessel}}</v-btn>
-            <v-btn flat class="titleBtn"  v-show="userLogged" v-else v-on:click="navTo(item)"> {{item}}</v-btn>
-        </div>
-        <div v-show="!showBreadCrumb">        
+        <!--<div v-show="showBreadCrumb" v-for="(item,index) in breadCrumbList" v-bind:key="item">-->
+            <!--<div class="titleBtn" v-if="index>0">></div>-->
+
+            <!--<v-btn flat class="titleBtn" v-show="userLogged" v-if="item=='Vessel View'" v-on:click="navTo(item)">{{selVessel}}</v-btn>-->
+            <!--<v-btn flat class="titleBtn"  v-show="userLogged" v-else v-on:click="navTo(item)"> {{item}}</v-btn>-->
+        <!--</div>-->
+        <div v-show="!showBreadCrumb">
             <v-btn flat class="titleBtn" v-on:click="goBack()">
                 <v-icon dark left>arrow_back</v-icon>Back
             </v-btn>
@@ -16,16 +14,16 @@
         </div>
         <v-spacer />
         <v-btn flat v-show="userLogged" v-if="this.$route.name == 'Engine Faults'" v-on:click="navTo('Faults History')">Faults History</v-btn>
-        <v-select v-show="userLogged" dark v-model="select" :items="dropDownList" flat solo primary             
+        <v-select v-show="userLogged" dark v-model="select" :items="dropDownList" flat solo primary
             background-color='rgb(51,82,128)'
             style="height:100%; max-width:200px; margin-top:15px; margin-bottom:5px; font-size:18px;">
-        </v-select> 
+        </v-select>
         <div v-show="userLogged" class="timeStamp">{{timeStamp}}</div>
-        <v-dialog v-model="dialog" max-width="300px">
+        <v-dialog v-model="dialog" max-width="200px">
             <v-date-picker
                 v-model="datePicked"
                 color='rgb(51,82,128)'
-                full-width/>   
+                full-width/>
             <v-alert
                 class='alert'
                 :value="alert"
@@ -36,8 +34,8 @@
                 dismissible
                 @input="closeAlert">
                 There is no available data for this date.
-            </v-alert>      
-        </v-dialog>   
+            </v-alert>
+        </v-dialog>
     </v-toolbar>
 </template>
 
@@ -67,11 +65,11 @@ export default {
         if (temp.indexOf('average')>-1)
             temp.splice(temp.indexOf('average'),1);
 
-        this.timeStamp = temp[temp.length-1];   
-        
+        this.timeStamp = temp[temp.length-1];
+
         let name = this.$route.name;
 
-        
+
 
         if (this.screensForBack.includes(name)) this.showBreadCrumb=false;
         else this.showBreadCrumb = true;
@@ -83,11 +81,11 @@ export default {
 
             this.breadCrumbList = this.breadCrumbList.slice(0,index+1);
         }
-        else 
+        else
         {
             this.breadCrumbList.push(name);
         }
-        
+
     },
     data () {
         return {
@@ -104,10 +102,10 @@ export default {
             showBreadCrumb:true
         }
     },
-    computed: {    
+    computed: {
         currPath: function () {
             return  this.$route.path;
-        },        
+        },
         selVessel: function () { return globalStore.selectedVessel; },
         userLogged: function () { return globalStore.userLogged; },
         dataLoaded: function () { return globalStore.type; },
@@ -124,7 +122,7 @@ export default {
             //     this.breadCrumbList =[];
             //     this.breadCrumbList.push(name);
             // }
-            // else 
+            // else
 
             if (this.screensForBack.includes(name)) this.showBreadCrumb=false;
             else this.showBreadCrumb = true;
@@ -136,7 +134,7 @@ export default {
 
                 this.breadCrumbList = this.breadCrumbList.slice(0,index+1);
             }
-            else 
+            else
             {
                 this.breadCrumbList.push(name);
             }
@@ -145,7 +143,7 @@ export default {
         select:function()
         {
             if (this.select!='')
-            { 
+            {
                 if (this.select=='Select Date')
                 {
                     // if (this.datePicked=='')
@@ -153,22 +151,22 @@ export default {
 
                     this.dialog=true;
                 }
-                else 
+                else
                 {
                     if (this.select=='Last Update') apiService.getLastUpdate(globalStore.selectedIMO);
-                    else apiService.getToday(globalStore.selectedIMO);  
-                    
+                    else apiService.getToday(globalStore.selectedIMO);
+
                     // setTimeout(() => {
                     //     var temp = Object.keys(globalStore.reference);
 
                     //     if (temp.indexOf('average')>-1)
                     //         temp.splice(temp.indexOf('average'),1);
 
-                    //     this.timeStamp = temp[temp.length-1];}, 400); 
-                }       
-                
+                    //     this.timeStamp = temp[temp.length-1];}, 400);
+                }
+
                 this.placeholder = this.select;
-                    
+
                 this.select = '';
             }
         },
@@ -177,9 +175,9 @@ export default {
             apiService.getVesselConstants(globalStore.selectedIMO);
 
             //console.log(this.placeholder);
-           
+
             if (this.placeholder=='Last Update') apiService.getLastUpdate(globalStore.selectedIMO);
-            else if (this.placeholder=='Today')  apiService.getToday(globalStore.selectedIMO);                                 
+            else if (this.placeholder=='Today')  apiService.getToday(globalStore.selectedIMO);
 
         },
         mapDate:function()
@@ -188,16 +186,16 @@ export default {
         },
         datePicked:function()
         {
-            //this.check = 
+            //this.check =
             //console.log(this.datePicked);
-            apiService.checkDate(this.datePicked, globalStore.selectedIMO);           
-            
+            apiService.checkDate(this.datePicked, globalStore.selectedIMO);
+
         },
         dataLoaded : function()
         {
             setTimeout(() => {
                 var temp = Object.keys(globalStore.signals);
-                
+
                 if (temp.length>0)
                 {
                     if (temp.indexOf('average')>-1)
@@ -205,11 +203,11 @@ export default {
 
                     if ((globalStore.type=='today') || (globalStore.type=='last')) this.timeStamp = temp[temp.length-1];
                     else this.timeStamp = new Date(temp[temp.length-2]).toISOString().slice(0, 10);
-                    
+
                 }
-                
-            }); 
-        }, 
+
+            });
+        },
         checkedDate(check)
         {
             if (check)
@@ -217,18 +215,18 @@ export default {
                 if (globalStore.validDate)
                 {
                     apiService.getDate(this.datePicked, globalStore.selectedIMO);
-                    
-                    this.dialog=false;  
-                }    
-                else 
+
+                    this.dialog=false;
+                }
+                else
                 {
                     this.alert = true;
-                }      
+                }
             }
-        } 
+        }
     },
     methods:
-    {        
+    {
         closeAlert(v) {
             this.alert = false;
         },
@@ -248,7 +246,7 @@ export default {
 #titleBar
 {
   background-color:rgb(244,244,244);
-  padding:0px;  
+  padding:0px;
   font-size: 24px;
   color:rgb(51,82,128);
 }
@@ -256,25 +254,25 @@ export default {
 .titleBtn
 {
   color:rgb(51,82,128);
-  font-size:20px;
-  text-transform: none;     
+  font-size:10px;
+  text-transform: none;
   display: inline-block;
   height:100%;
 }
 
 .timeStamp
 {
-    color:rgb(51,82,128); 
-    font-size:16px; 
-    text-transform: none; 
+    color:rgb(51,82,128);
+    font-size:10px;
+    text-transform: none;
     display: flex;
     align-items:center;
     border-style:solid;
-    border-color:rgb(51,82,128); 
-    border-width: 2px;
-    padding-left:10px;
+    border-color:rgb(51,82,128);
+    border-width: 1px;
+    padding-left:4px;
     padding-right:10px;
-    height:32px; 
+    height:32px;
     margin-top:15px;
     margin-bottom:13px;
 }
@@ -282,7 +280,7 @@ export default {
 
 <style>
 
-.v-input__slot 
+.v-input__slot
 {
     min-height:0px;
 }
