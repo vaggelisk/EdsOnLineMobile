@@ -1,24 +1,24 @@
 <template>
-  <v-container ref="pdfContent" fluid fill-height grid-list-md style="padding:0px 10px 5px 10px;width:100%;background-color:white;">
+  <v-container  fluid  style="padding:0px 10px 5px 10px;width:100%;background-color:white;">
     <v-layout >
-      <v-flex d-flex >
+      <v-flex >
         <v-layout column >
 
-          <v-flex d-flex md3 style="max-height:50%;">
+          <v-flex  style="height:200px;">
             <BarChart
               v-if="chartData['pcomp']"
               v-bind:active="active"
               v-bind:chartOptions="chartData['pcomp']"
               v-bind:title="titles['pcomp']"/>
           </v-flex>
-          <v-flex d-flex md3 style="max-height:100%;">
+          <v-flex style="height:200px;" >
             <BarChart
               v-if="chartData['pmax']"
               v-bind:active="active"
               v-bind:chartOptions="chartData['pmax']"
               v-bind:title="titles['pmax']"/>
           </v-flex>
-          <v-flex d-flex md3 style="max-height:20%;">
+          <v-flex style="height:200px;" >
             <BarChart
               v-if="chartData['tExhC']"
               v-bind:active="active"

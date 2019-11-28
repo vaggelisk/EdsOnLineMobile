@@ -1,18 +1,19 @@
 <template>
-  <v-container fluid style="padding:0px 10px 5px 10px;background-color: rgb(244,244,244)" >
+  <v-container fluid style="padding:0px 10px 5px ;background-color: rgb(244,244,244)" >
   <!--<v-container fluid grid-list-md fill-height style="padding:0px 10px 5px 10px;width:100%;height:100%">-->
     <v-layout column v-if="userLogged">
         <v-flex style="height: 300px">
-            <!--<v-layout >-->
+            <v-layout >
             <Map
                 v-if="mapData[vesselList[vesselList.length-1].name]"
                 v-bind:points="mapData[vesselList[vesselList.length-1].name]"
                 v-bind:zoom="2"/>
-            <!--</v-layout>-->
+            </v-layout>
         </v-flex>
 
         <v-flex>
             <v-layout >
+
                 <DashboardCard
                         v-for="vessel in vesselList" :key="vessel"
                         v-bind:cardData="cardData[vessel.name]">
@@ -29,8 +30,7 @@ import axios from 'axios'
 import DashboardCard from '../controls/DashboardCard'
 import Map from '../controls/Map'
 
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+
 import {globalStore} from "../main.js"
 
 export default {
@@ -404,42 +404,45 @@ export default {
                     'imo' :vessel.imo
                 });
 
-
-                //let now = new Date(globalStore.dashboard.date);
-                let dates = Object.keys(globalStore.mapData[vessel.name]);
-
-                for (let i=dates.length-1;i>=0;i--)
+                if (Object.keys(globalStore.mapData).includes(vessel.name))
                 {
-                    let currDate = dates[i];//now.toISOString().substring(0,10);
+                    //let now = new Date(globalStore.dashboard.date);
+                    let dates = Object.keys(globalStore.mapData[vessel.name]);
 
-                    let temp = globalStore.mapData[vessel.name][currDate];
-
-                    html ='<b>'+currDate+' '+vessel.name+'</b><br>';
-
-                    for (let p=0;p<params.length;p++)
+                    for (let i=dates.length-1;i>=0;i--)
                     {
-                        if (temp[params[p]]!=-1000)
-                            html += globalStore.mapping[params[p]]+': '+ temp[params[p]].toFixed(2)+' ['+globalStore.units[params[p]]+']<br>';
-                        else if ((params[p]=='ME_Power_perc')&&(temp['load']!=-1000))
-                            html += globalStore.mapping[params[p]]+': '+  (temp['load']*100).toFixed(2)+' ['+globalStore.units[params[p]]+']<br>';
-                        else html += globalStore.mapping[params[p]]+': - ['+globalStore.units[params[p]]+']<br>';
+                        let currDate = dates[i];//now.toISOString().substring(0,10);
+
+                        let temp = globalStore.mapData[vessel.name][currDate];
+
+                        html ='<b>'+currDate+' '+vessel.name+'</b><br>';
+
+                        for (let p=0;p<params.length;p++)
+                        {
+                            if (temp[params[p]]!=-1000)
+                                html += globalStore.mapping[params[p]]+': '+ temp[params[p]].toFixed(2)+' ['+globalStore.units[params[p]]+']<br>';
+                            else if ((params[p]=='ME_Power_perc')&&(temp['load']!=-1000))
+                                html += globalStore.mapping[params[p]]+': '+  (temp['load']*100).toFixed(2)+' ['+globalStore.units[params[p]]+']<br>';
+                            else html += globalStore.mapping[params[p]]+': - ['+globalStore.units[params[p]]+']<br>';
+                        }
+
+                        html +='Faults: '+temp['Faults'];
+
+                        points.push({
+                            'date':currDate.replace(/-/g,''),
+                            'coords':[temp['LON'],temp['LAT']],
+                            'color':temp['mapColor'],
+                            'html':html,
+                            'status':'running',
+                            'vessel':vessel.name,
+                            'imo' :vessel.imo
+                        });
+
                     }
-
-                    html +='Faults: '+temp['Faults'];
-
-                    points.push({
-                        'date':currDate.replace(/-/g,''),
-                        'coords':[temp['LON'],temp['LAT']],
-                        'color':temp['mapColor'],
-                        'html':html,
-                        'status':'running',
-                        'vessel':vessel.name,
-                        'imo' :vessel.imo
-                    });
+                    //console.log(points);
+                    this.$set(this.mapData, vessel.name,points)
 
                 }
-                //console.log(points);
-                this.$set(this.mapData, vessel.name,points);
 
                 //}
 

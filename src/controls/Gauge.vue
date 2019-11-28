@@ -1,23 +1,16 @@
 <template>
     <v-card flat style="height:100%;width:100%">
-        <v-card-title  primary class="title" style="height:10%;padding-top:5px;padding-bottom:5px;">{{data.title}} {{data.unit}}</v-card-title>
+        <v-card-title  primary  style="font-size:14px;height:10%;padding-top:5px;padding-bottom:5px;">{{data.title}} {{data.unit}}</v-card-title>
         <v-card-actions fill-height style="height:90%;padding:0px;">
-            <dx-circular-gauge   style="width:100%;height:100%;"
+            <dx-circular-gauge   style="width:50%;height:50%;"
                             :value="data.value"
                             :redraw-on-resize="true" >
                 <dx-value-indicator
                     spindleGapSize=60
                     type="rectangleNeedle"
-                    width=2
-                    spindleSize=65 
+                    width=1
+                    spindleSize=65
                     offset=7 />
-                <!-- <dx-subvalue-indicator
-                    color="rgb(51,82,128)"
-                    type="textCloud">                    
-                    <dx-text >
-                        <dx-font size=13 />
-                    </dx-text >
-                </dx-subvalue-indicator> -->
                 <dx-geometry
                     :start-angle="225"
                     :end-angle="315"
@@ -32,14 +25,14 @@
                 <dx-range-container :width="15" background-color="transparent">
                 <dx-range :start-value="data.startValue"
                             :end-value="data.rangeLimit"
-                            color= "rgb(60, 171, 48)"/>                        
+                            color= "rgb(60, 171, 48)"/>
                 <dx-range :start-value="data.rangeLimit"
                             :end-value="data.endValue"
                             color="rgb(205, 57, 64)"/>
-                </dx-range-container>           
-            </dx-circular-gauge> 
-            <span v-if="data.value!=-1000" class="gaugeTitle" :style="'font-size: 26px;'"> {{data.value.toFixed(1)}} </span>
-            <span v-else class="gaugeTitle" :style="'font-size: 26px;'"> - </span>
+                </dx-range-container>
+            </dx-circular-gauge>
+            <span v-if="data.value!=-1000" class="gaugeTitle" :style="'font-size: 16px;'"> {{data.value.toFixed(1)}} </span>
+            <span v-else class="gaugeTitle" :style="'font-size: 16px;'"> - </span>
         </v-card-actions>
     </v-card>
 </template>
@@ -57,7 +50,7 @@
     DxFont,
     DxLabel,
     DxTick,
-    DxSubvalueIndicator, 
+    DxSubvalueIndicator,
     DxText
   } from "devextreme-vue/circular-gauge";
 
@@ -76,7 +69,7 @@ export default {
         DxTitle,
         DxFont,
         DxSubvalueIndicator,
-        DxText 
+        DxText
     },
     props:
     {
@@ -94,13 +87,13 @@ export default {
         return {
         }
     },
-    computed: {    
+    computed: {
     },
     watch: {
-        
+
     },
     methods:
-    {            
+    {
     }
 }
 </script>
@@ -110,8 +103,8 @@ export default {
  {
     margin: 0;
     position: absolute;
-    top: 60%;
-    left: 50%;
+    top: 58%;
+    left: 25%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     color: rgb(33,33,33);

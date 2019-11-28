@@ -24,23 +24,21 @@
         </v-card-title>
 
         <v-card-actions fill-height style="height:90%;">
-            <v-container fluid grid-list-md style="padding:10px;height:100%;">
+            <v-container fluid style="padding:0;height:100%;">
+
                 <v-layout row fill-height>
-                    <v-flex d-flex md4>
-                        <v-layout column fill-height>
-                            <v-flex d-flex v-for="item in cardData" :key="item" style="min-height:0px;font-size:13px;padding:0px;">
+                    <v-flex>
+
+                        <v-layout column fill-height >
+                            <v-flex  v-for="item in cardData" :key="item" style="min-height:0px;font-size:13px;">
                                 <v-layout row v-if="item.label">
-                                    <v-flex md5 d-flex style="padding-right:0px;">{{item.label}}:</v-flex>
-                                    <v-flex md7 v-if="item.value==-1000" d-flex>- {{item.unit}}</v-flex>
-                                    <v-flex md7 v-else-if="item.format!=null" d-flex>{{item.value.toFixed(item.format)}} {{item.unit}}</v-flex>
-                                    <v-flex md7 v-else d-flex>{{item.value}} {{item.unit}}</v-flex>
+                                    <v-flex style="align-content: start" align- start justify-start >{{item.label}}:</v-flex>
+                                    <v-flex  v-if="item.value==-1000" d-flex>- {{item.unit}}</v-flex>
+                                    <v-flex  v-else-if="item.format!=null" style="text-align: left;  align-content: end">{{item.value.toFixed(item.format)}} {{item.unit}}</v-flex>
+                                    <v-flex v-else style="text-align-all: left">{{item.value}} {{item.unit}}</v-flex>
                                 </v-layout>
                             </v-flex>
-                            <!--<v-flex>-->
-                                <!--<v-layout  style="margin-top: -20px" row>-->
-                                    <!--<v-flex style="padding-right:0px;">Vaggelis:</v-flex>-->
-                                <!--</v-layout>-->
-                            <!--</v-flex>-->
+
                         </v-layout>
                     </v-flex>
                     <!--<v-flex d-flex md3>-->

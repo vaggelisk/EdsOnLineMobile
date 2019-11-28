@@ -5,15 +5,33 @@
             <v-layout  >
                 <v-flex  >
                     <v-layout column>
-                        <v-flex  >
+                        <v-flex >
+                            <v-row  justify="center" align="center">
+                                <v-card>
+                                <v-col >
+                                    <!--<v-card>-->
+                                        Column 1
+                                    <!--</v-card>-->
+                                </v-col>
+                                <v-col >
+                                    <!--<v-card>-->
+                                        Column 2
+                                    <!--</v-card>-->
+                                </v-col>
+                                </v-card>
+                            </v-row>
+                        </v-flex>
+                        <v-flex >
                              <v-card >
                                 <v-card-actions >
                                     <v-layout column >
-                                        <v-flex style="padding:0px;">
+                                        <v-flex style="padding:0;">
                                             <Gauge
                                                 v-bind:data="gaugeData['ensp']"/>
                                         </v-flex>
-                                        <v-flex  style="padding:0px;">
+                                    </v-layout>
+                                    <v-layout column>
+                                        <v-flex  style="padding:0;">
                                             <Gauge
                                                 v-bind:data="gaugeData['load']"/>
                                         </v-flex>
@@ -35,10 +53,7 @@
                                 v-bind:cardData="cardData"
                                 v-bind:gaugeData="gaugeData"/>
                         </v-flex>
-                        <!--<v-flex >-->
-                            <!--<FaultsWidget-->
-                                <!--v-bind:navigation="true"/>-->
-                        <!--</v-flex>-->
+
                     </v-layout>
                 </v-flex>
             </v-layout>

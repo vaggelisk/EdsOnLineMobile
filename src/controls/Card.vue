@@ -2,7 +2,10 @@
     <v-card fill-height :flat="flat" style="height:100%;background-color:transparent;">
         <v-container fluid fill-height grid-list-md style="padding:5px;">
             <v-layout column fill-height>
-                <v-flex d-flex md3  style="max-height:25%;justify-content:center;align-items:center;font-size:16px;">
+                <v-flex  v-if="cardData.title=='Scavenge Receiver Pressure'" style="max-height:25%;justify-content:center;align-items:center;font-size:16px;">
+                    Scavenge R Pressure
+                </v-flex>
+                <v-flex v-else style="max-height:25%;justify-content:center;align-items:center;font-size:16px;">
                     {{cardData.title}}
                 </v-flex>
                  <v-flex v-if="cardData.color==0" d-flex md4 style="max-height:33%;justify-content:center;align-items:center;font-size:30px;font-weight:bold;color:rgb(60, 171, 48)">
@@ -28,7 +31,7 @@
                 </v-flex>
                  <v-flex d-flex md2 style="max-height:16%;align-items:center;">
                      Reference
-                </v-flex>                
+                </v-flex>
             </v-layout>
         </v-container>
     </v-card>
@@ -51,7 +54,7 @@
         methods: {
         },
         mounted() {
-        }, 
+        },
         watch:
         {
         }
