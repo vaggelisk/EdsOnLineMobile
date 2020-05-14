@@ -32,8 +32,7 @@
             }
         },
         methods: {
-            onResize(event)
-            {
+            onResize(event) {
                 // setTimeout(() => {
                 //     this.chartData.chart.height =this.$refs['chartContainer'].clientHeight;
                 //     this.load=true;});
@@ -41,13 +40,10 @@
         },
         mounted() {     
             window.addEventListener('resize', this.onResize);
-
-            this.load = false;
-        }, 
+        },
         watch:
         {
-            active : function()
-            {
+            active : function() {
                 // if (this.active)
                 // {
                 //     setTimeout(() => {

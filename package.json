@@ -17,6 +17,7 @@
     "html2canvas": "^1.0.0-rc.1",
     "jspdf": "^1.5.3",
     "mapbox-gl": "^1.0.0",
+    "mobile-detect": "^1.4.4",
     "vue": "^2.6.6",
     "vue-baidu-map": "^0.21.19",
     "vue-cookies": "^1.5.13",

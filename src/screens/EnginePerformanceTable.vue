@@ -206,13 +206,11 @@ import {globalStore} from "../main.js"
         for (let i=0;i<this.meanFields.length;i++)
         { 
           let forAvg=[];
-          //console.log(this.meanFields[i]);
-       
+
           for (let j=1;j<=2;j++)
           {
             if ((available.includes(this.meanFields[i]+j))&&(globalStore.signals[last][this.meanFields[i]+j]!=-1000))
               forAvg.push(globalStore.signals[last][this.meanFields[i]+j]); 
-            // else val='N/A';                       
           }
 
           let val;

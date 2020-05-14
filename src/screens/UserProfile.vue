@@ -34,15 +34,15 @@
                     </v-layout>
                 </v-flex>
             </v-layout>
-            <v-layout row style="max-height:50px;padding-left:20px;">
-                <v-btn flat style="color:white; background-color: rgb(51,82,128);height:30px;" @click="showEditDialog">
-                   Edit Profile
-                </v-btn>
-                <v-btn flat style="color:white; background-color: rgb(51,82,128);height:30px;" @click="showPasswordDialog">
-                    Change Password
-                </v-btn>
-                <v-spacer/>
-            </v-layout>
+            <!--<v-layout row style="max-height:50px;padding-left:20px;">-->
+                <!--<v-btn flat style="color:white; background-color: rgb(51,82,128);height:30px;" @click="showEditDialog">-->
+                   <!--Edit Profile-->
+                <!--</v-btn>-->
+                <!--<v-btn flat style="color:white; background-color: rgb(51,82,128);height:30px;" @click="showPasswordDialog">-->
+                    <!--Change Password-->
+                <!--</v-btn>-->
+                <!--<v-spacer/>-->
+            <!--</v-layout>-->
             <v-dialog v-model="editDialog" width="400" height="350">
                 <v-card style="width:400px;height:450px;">
                 <v-card-title primary class="title" style="height:15%;">
@@ -61,7 +61,7 @@
                                     <v-text-field v-model="editModels[field]"></v-text-field>
                                 </v-flex>
                             </v-layout>
-                        </v-flex>                        
+                        </v-flex>
                     </v-layout>
                 </v-card-text>
                 <v-card-actions style="height:15%;">
@@ -89,8 +89,8 @@
                                     :type="showPassword ? 'text' : 'password'"
                                     label="Password"
                                     @click:append="showPassword = !showPassword">
-                                </v-text-field>                                                               
-                            </v-flex>    
+                                </v-text-field>
+                            </v-flex>
                             <v-flex d-flex md6>
                                 <v-text-field
                                     v-model="passwordConfirmation"
@@ -98,8 +98,8 @@
                                     :type="showConfirmation ? 'text' : 'password'"
                                     label="Password Confirmation"
                                     @click:append="showConfirmation = !showConfirmation">
-                                </v-text-field>                           
-                            </v-flex>                                     
+                                </v-text-field>
+                            </v-flex>
                         </v-layout>
                     </v-card-text>
                     <v-card-actions style="height:15%;">
@@ -142,33 +142,32 @@ import axios from 'axios'
     data () {
       return {
             editDialog:false,
-            passwordDialog:false,   
+            passwordDialog:false,
             editModels:{},
             editFields:['firstname','lastname','displayName'],
             password:'',
             showPassword:false,
-            passwordConfirmation:'',   
-            showConfirmation:false,      
-            user: require('../assets/estLogo.png'), 
+            passwordConfirmation:'',
+            showConfirmation:false,
+            user: require('../assets/estLogo.png'),
             fields:['firstname','lastname','displayName','email'],
             labels:['First Name','Last Name','Username', 'Email'],
             alert:false
       }
     },
-    created() {  
+    created() {
         for (let i=0;i<this.editFields.length;i++)
         {
             this.editModels[this.editFields[i]]= this.profile[this.editFields[i]];
         }
 
-        //console.log(this.editModels);
         if (globalStore.userProfile.company =="Berge Bulk") this.user = require('../assets/bbLogo.png');
         else if (globalStore.userProfile.company =="Win GD") this.user = require('../assets/wingdLogo.jpg');
-    
+
     },
-    mounted() {        
-    },    
-    computed: {    
+    mounted() {
+    },
+    computed: {
       profile: function() {return globalStore.userProfile}
     },
     methods: {
@@ -198,15 +197,12 @@ import axios from 'axios'
             )
             .then(
                 (response) => {
-                   // console.log(this.editModels);
-                    //console.log(response.data);
                     for (let i=0;i<this.editFields.length;i++)
                     {
                         globalStore.userProfile[this.editFields[i]]= response.data.user[this.editFields[i]];
-                    }                    
+                    }
                 },
                 (error) => {
-                    //console.log(error);
                 }
             );
 
@@ -223,11 +219,8 @@ import axios from 'axios'
                     )
                     .then(
                         (response) => {
-                          //  console.log(response);
-                            
                         },
                         (error) => {
-                          //  console.log(error);
                         }
                     );
 
@@ -236,7 +229,7 @@ import axios from 'axios'
             else
             {
                 this.alert = true;
-            } 
+            }
 
         }
     },

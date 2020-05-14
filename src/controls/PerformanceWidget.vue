@@ -12,43 +12,35 @@
         <v-card-actions fill-height style="height:90%;">
             <v-container fluid fill-height grid-list-md style="padding:5px;">
                 <v-layout column fill-height>
-                    <v-flex   style="max-height:50%;">
+                    <v-flex style="max-height:50%;">
                         <v-layout row>
-                            <v-flex  md6>
-                                <Card
-                                   v-bind:cardData="cardData['pcomp']"/>
+                            <v-flex style="width: 50%" md6>
+                                <Card v-bind:cardData="cardData['pcomp']"/>
                             </v-flex>
-                            <v-flex md6>
-                                <Card
-                                   v-bind:cardData="cardData['tcspeed']"/>
+                            <v-flex style="width: 50%" md6>
+                                <Card v-bind:cardData="cardData['tcspeed']"/>
+                            </v-flex>
+                        </v-layout>
+                    </v-flex>
+                    <v-flex style="max-height:50%;">
+                        <v-layout row>
+                            <v-flex style="width: 50%" md6>
+                                <Card v-bind:cardData="cardData['pscav']"/>
+                            </v-flex>
+                            <v-flex style="width: 50%" md6>
+                                <Card v-bind:cardData="cardData['tTurbIn']"/>
                             </v-flex>
 
                         </v-layout>
                     </v-flex>
                     <v-flex style="max-height:50%;">
-                        <v-layout row>
-                            <v-flex d-flex md6>
-                                <Card
-                                        v-bind:cardData="cardData['pscav']"/>
-                            </v-flex>
-                            <v-flex d-flex md6>
-                                <Card
-                                        v-bind:cardData="cardData['tTurbIn']"/>
-                            </v-flex>
-
-                        </v-layout>
-                    </v-flex>
-                     <v-flex  style="max-height:50%;">
                          <v-layout row>
-                            <v-flex d-flex md6>
-                                <Card
-                                   v-bind:cardData="cardData['pmax']"/>
+                            <v-flex style="width: 50%"  md6>
+                                <Card v-bind:cardData="cardData['pmax']"/>
                             </v-flex>
-                            <v-flex d-flex md6>
-                                <Card
-                                   v-bind:cardData="cardData['bsfc']"/>
+                            <v-flex style="width: 50%"  md6>
+                                <Card v-bind:cardData="cardData['bsfc']"/>
                             </v-flex>
-
                         </v-layout>
                     </v-flex>
                 </v-layout>
@@ -78,17 +70,13 @@
             }
         },
         methods: {
-            navTo()
-            {
+            navTo() {
                 this.$router.push( { name:  'Engine Performance' } )
             }
-
         },
         mounted() {
         },
-        watch:
-        {
-        }
+        watch: {}
     }
 </script>
 

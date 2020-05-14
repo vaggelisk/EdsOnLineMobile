@@ -2,7 +2,9 @@ import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
-import axios from 'axios'
+
+var MobileDetect = require('mobile-detect'),
+    md = new MobileDetect(window.navigator.userAgent);
 
 Vue.config.productionTip = false;
 // Vue.prototype.$http = axios;
@@ -28,57 +30,24 @@ export var globalStore = new Vue({
         units:{},
         loadDiagram:{},
         limits:{},
-        type:'',
+        type:'last',
         faults:[],
         dashboard:{},
-        mapData:[],
+        mapData:{},
         chartData:{},
         mapDate:'',
         alertFilters: [],
-        alerts:[
-            // {
-            //   Id:1,
-            //   Vessel:'Energy Triumph',
-            //   Engine:'Energy Triumph ME',
-            //   Component:'Cylinder 4',
-            //   Subsystem:'Servo Oil',
-            //   Fault:'Fault 5',
-            //   Date:'2019/03/05'
-            // },
-            // {
-            //   Id:2,
-            //   Vessel:'Energy Triumph',
-            //   Engine:'Energy Triumph ME',
-            //   Component:'Cylinder 2',
-            //   Subsystem:'Fuel Injection',
-            //   Fault:'Fault 3',
-            //   Date:'2019/01/23'
-            // },
-            // {
-            //   Id:3,
-            //   Vessel:'Energy Triumph',
-            //   Engine:'Energy Triumph ME',
-            //   Component:'Cylinder 6',
-            //   Subsystem:'Exhaust Gas',
-            //   Fault:'Fault 1',
-            //   Date:'2019/01/12'
-            // },
-            // {
-            //   Id:4,
-            //   Vessel:'Energy Triumph',
-            //   Engine:'Energy Triumph ME',
-            //   Component:'Cylinder 6',
-            //   Subsystem:'Exhaust Gas',
-            //   Fault:'Fault 4',
-            //   Date:'2019/01/12'
-            // }
-        ],
+        alerts:[],
         validDate:false,
-        checkedDate:false
+        checkedDate:false,
+        dateTo:''
     },
-    created()
-    {
-    }
+    methods: {
+        is_mobile : function () {
+            return md.mobile() != null;
+        }
+    },
+    created(){}
 });
 
 new Vue({

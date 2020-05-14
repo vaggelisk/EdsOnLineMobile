@@ -32,43 +32,32 @@
         data: function () {
             return {
                 load:false
-
             }
         },
         methods: {
-            onResize(event)
-            {
-                this.load = false;
-
+            onResize(event) {
                 setTimeout(() => {
-                    this.chartOptions.chart.height =this.$refs['chartContainer'].clientHeight;
-                    this.load=true;});
+                    this.chartOptions.chart.height = this.$refs['chartContainer'].clientHeight;
+                    this.load=true;
+                });
             }
         },
         mounted() {
             window.addEventListener('resize', this.onResize);
-
-           //this.load = false;
+            this.onResize();
         },
-        watch:
-        {
-            active : function()
-            {
-                this.load = false;
-
+        watch: {
+            active : function() {
                 setTimeout(() => {
                     this.chartOptions.chart.height =this.$refs['chartContainer'].clientHeight;
-                    this.load=true;});
-
+                    this.load=true;
+                });
             },
-            chartOptions:function()
-            {
-                this.load = false;
-
+            chartOptions:function() {
                 setTimeout(() => {
                     this.chartOptions.chart.height =this.$refs['chartContainer'].clientHeight;
-                    this.load=true;});
-
+                    this.load=true;
+                });
             }
         }
     }

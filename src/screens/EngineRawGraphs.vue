@@ -172,18 +172,6 @@ export default {
           let yText='';
 
           let tag = this.parameters1[p].replace(/[0-9]/g, ''), index =  this.parameters1[p].match(/[0-9]+/g);
-          //console.log(tag+' '+index);
-
-          // if (Object.keys(globalStore.mapping).includes(this.parameters1[p]))
-          // {
-          //   yText=globalStore.mapping[this.parameters1[p].replace('1','')]+' ['+ globalStore.units[this.parameters1[p]]+']';
-          // }
-          // else
-          // {
-          //   let param = this.parameters1[p].substring(0,this.parameters1[p].length-1);
-
-          //   yText= globalStore.mapping[param]+" "+this.parameters1[p].substring(this.parameters1[p].length-1)+' ['+globalStore.units[param]+']';
-          // }
 
           if (index==null)
             yText = globalStore.mapping[tag]+' ['+ globalStore.units[tag]+']';
@@ -264,18 +252,6 @@ export default {
           let yText='';
 
           let tag = this.parameters2[p].replace(/[0-9]/g, ''), index =  this.parameters2[p].match(/[0-9]+/g);
-          //console.log(tag+' '+index);
-
-          // if (Object.keys(globalStore.mapping).includes(this.parameters2[p]))
-          // {
-          //   yText=globalStore.mapping[this.parameters2[p].replace('1','')]+' ['+ globalStore.units[this.parameters2[p]]+']';
-          // }
-          // else
-          // {
-          //   let param = this.parameters2[p].substring(0,this.parameters2[p].length-1);
-
-          //   yText= globalStore.mapping[param]+" "+this.parameters2[p].substring(this.parameters2[p].length-1)+' ['+globalStore.units[param]+']';
-          // }
            if (index==null)
             yText = globalStore.mapping[tag]+' ['+ globalStore.units[tag]+']';
           else             

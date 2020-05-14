@@ -52,26 +52,15 @@
                         {withCredentials: true  }
                     )
                         .then(response => {
-                            console.log(response)
-                            console.log(response.data)
-                            console.log(window.csrf_token)
                             if (response.status===200) {
-                                // router.replace('/dashboard')
-
                             }
                         })
                         .catch(function (error) {
-                            console.error(error.response);
                         });
                 }
             },
             bringProfile(){
-                // this.$http.post('http://localhost:8000/profile', {},  { withCredentials: true  , headers: { Cookie: 'jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6ImVrQHBhLmNvbSIsImV4cCI6MTU1NjE5MzcyNX0.SeNzpcFeFaieDYUuLku9ZTqcCB0u6Q22mbXUPpOm1EU'}})
-                this.$http.post('http://localhost:8000/profile', {},  { withCredentials: true   })
-                    .then(response => {
-                        console.log("the profile is: ")
-                        console.log(response.data)
-                    })
+                this.$http.post('http://localhost:8000/profile', {}, {withCredentials: true}).then(response => {})
             }
 
         }

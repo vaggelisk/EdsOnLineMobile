@@ -1,7 +1,7 @@
 <template>
     <v-card fill-height style="height:100%;width:100%;" @click="showDialog">
-        <v-card-title  primary class="title" style="height:15%;width:100%;padding-top:5px;padding-bottom:5px;">{{title}}</v-card-title>
-        <v-card-actions  ref="chartContainer" fill-height style="height:85%;width:100%;padding-top:0px;padding-bottom:0px;">  
+        <v-card-title primary class="title" style="height:15%;width:100%;padding-top:5px;padding-bottom:5px;">{{title}}</v-card-title>
+        <v-card-actions ref="chartContainer" fill-height style="height:85%;width:100%;padding-top:0px;padding-bottom:0px;">
             <highcharts v-if="load" style="height:100%;width:100%;" :class="repClass" :options="chartOptions"></highcharts>
         </v-card-actions>
     </v-card>
@@ -18,58 +18,52 @@
     export default {
         name: "TimelineChart",
         components: {
-             highcharts: Chart 
+            highcharts: Chart
         },
         props: {
-            chartOptions:Object,
-            active:Boolean, 
-            title:String,
-            repClass:String
+            chartOptions: Object,
+            active: Boolean,
+            title: String,
+            repClass: String
         },
         data: function () {
-            return {  
-                load:false
+            return {
+                load: false
             }
         },
         methods: {
-            onResize(event)
-            {
+            onResize(event) {
                 setTimeout(() => {
-                    this.chartOptions.chart.height =this.$refs['chartContainer'].clientHeight;
-                    this.load=true;});
+                    if (typeof this.$refs['chartContainer'] != 'undefined') {
+                        this.chartOptions.chart.height = this.$refs['chartContainer'].clientHeight;
+                        this.load = true;
+                    }
+                });
             }
         },
         created() {
-           // this.popUpOptions = this.chartOptions;
-                       
-        }, 
-        mounted(){            
-            window.addEventListener('resize', this.onResize);
-
-            this.load = false;           
         },
-        watch:
-        {
-            active : function()
-            {
-                if (this.active)
-                {
+        mounted() {
+            window.addEventListener('resize', this.onResize);
+        },
+        watch: {
+            active: function () {
+                if (this.active) {
                     setTimeout(() => {
-                    this.chartOptions.chart.height =this.$refs['chartContainer'].clientHeight;
-                    this.load=true;});
+                        if (typeof this.$refs['chartContainer'] != 'undefined') {
+                            this.chartOptions.chart.height = this.$refs['chartContainer'].clientHeight;
+                            this.load = true;
+                        }
+                    });
                 }
-                
-                
             },
-            chartOptions:function()
-            {
-                this.load = false;
-                
+            chartOptions: function () {
                 setTimeout(() => {
-                    this.chartOptions.chart.height =this.$refs['chartContainer'].clientHeight;
-
-                    this.load=true;});               
-
+                    if (typeof this.$refs['chartContainer'] != 'undefined') {
+                        this.chartOptions.chart.height = this.$refs['chartContainer'].clientHeight;
+                        this.load = true;
+                    }
+                });
             }
         }
     }

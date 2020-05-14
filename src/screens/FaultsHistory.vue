@@ -204,41 +204,18 @@
         let component = this.filter['Component'];
 
         if (this.filter['Component']!='') temp = temp.filter(function(item,component) {
-          //console.log(component);
           return item.Component == component;
         }); 
 
         this.visibleFaults = temp;
         
       }
-      // selFaultChange(event)
-      // {
-      //   console.log(event);
-      //   this.selectedFaultId=event;
-      // }
-    }, 
+    },
     computed:
     {
-      
-      // selFault:function()
-      // {
-      //   var selected = this.currentFaults.filter(function(item){
-      //       return item.Id == this.selectedFaultId;
-      //     }, this);
-
-      //   return selected[0];
-      // }
     },
     watch:
     {
-      // active : function()
-      // {
-      //   for (let i=0;i<this.tabActive.length;i++)
-      //   {
-      //     if (i==this.active) this.tabActive[i]=true;
-      //     else this.tabActive[i]=false;
-      //   }
-      // }
     }
 
   }

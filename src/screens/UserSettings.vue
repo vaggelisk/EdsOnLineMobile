@@ -7,36 +7,27 @@
             <UserProfile/>
         </v-tab-item>
         <v-tab-item class="tabItem">
-            <Reports/>
-        </v-tab-item>
-        <v-tab-item class="tabItem">
             <AlertFilters/>
         </v-tab-item>
-        <!-- <v-tab-item class="tabItem">
-            <Customization/>
-        </v-tab-item> -->
     </v-tabs>
 </template>
 
 <script>
-    import UserProfile         from "./UserProfile"
-    import Reports  from "./Reports"
-    import AlertFilters      from "./AlertFilters"
-    import Customization      from "./Customization"
-    
+    import UserProfile from "./UserProfile"
+    import AlertFilters from "./AlertFilters"
+
+
     import {globalStore} from "../main.js"
 
     export default {
         name: 'UserSettings',
         components: {
             UserProfile,
-            Reports,
-            AlertFilters,
-            Customization 
+            AlertFilters
         },
         data() {
             return {
-                tabTitles: ["Profile", "Reports", "Alert Filters"],//, "Customization"],
+                tabTitles: ["Profile", "Alert Filters"],//, "Customization"],
                 active:  parseInt( this.$route.query.tab ),
                 tabActive:[false, false, false, false]
             }

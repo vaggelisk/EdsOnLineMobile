@@ -128,8 +128,6 @@ import BarChart from  '../controls/BarChart'
             
             let timestamps = Object.keys(globalStore.signals);
             let last = timestamps[timestamps.length-1];
-            //console.log(globalStore.chartData['controlLawsTier2']);
-               
 
             for (let i=0;i<keys.length;i++)
             {                
@@ -254,8 +252,6 @@ import BarChart from  '../controls/BarChart'
                                 {
                                     if((globalStore.signals[timestamps[t]]['pAmb1']!=-1000)&&(globalStore.signals[timestamps[t]]['pAmb2']!=-1000)&&(globalStore.signals[timestamps[t]]['pscav']!=-1000)&&(globalStore.signals[timestamps[t]]['pscav_cmcr']!=-1000)&&(globalStore.signals[timestamps[t]]['vec_'+paramKeys[0].replace('_rel','')]!=-1000))
                                     {
-                                        //console.log(globalStore.signals[timestamps[t]]['pscav_rel']);
-
                                         let aBar = 0.5*(globalStore.signals[timestamps[t]]['pAmb1']+globalStore.signals[timestamps[t]]['pAmb2']);
 
                                         this.chartData[keys[i]].series[1].data.push(

@@ -1,27 +1,14 @@
 <template>
-    <v-toolbar fixed flat id="titleBar" :height=40 style="top:60px;">
-
+    <v-toolbar v-show="userLogged" fixed flat id="titleBar" :height=40 style="top:60px;">
         <v-spacer />
-        <v-btn flat v-show="userLogged" v-if="this.$route.name == 'Engine Faults'" v-on:click="navTo('Faults History')">Faults History</v-btn>
-        <v-select v-show="userLogged" dark v-model="select" :items="dropDownList" flat  primary
-                  background-color='rgb(51,82,128)'
-                  style=" max-width:200px; margin-top:15px;  font-size:14px;">
-        </v-select>
-        <div v-show="userLogged" class="timeStamp">{{timeStamp}}</div>
-        <v-dialog v-model="dialog" max-width="200px">
-            <v-date-picker
-                    v-model="datePicked"
-                    color='rgb(51,82,128)'
-                    full-width/>
+        <div v-if="showTitle" style="margin-bottom: -16px; font-size: 20px; position: fixed; left: 26px;">{{ selVessel }}</div>
+        <v-select dark v-model="select" :items="dropDownList" flat  primary background-color='rgb(51,82,128)' style=" max-width:112px; margin-top:15px;  font-size:14px;"></v-select>
+        <div v-show="timeStamp" class="timeStamp">{{timeStamp}}</div>
+        <v-dialog v-model="dialog" max-width="300px">
+            <v-date-picker v-model="datePicked" color='rgb(51,82,128)' full-width/>
         </v-dialog>
         <v-dialog v-model="alert" max-width="200px">
-            <v-alert
-                    class='alert'
-                    :value="alert"
-                    type="info"
-                    transition="scale-transition"
-                    color='rgb(51,82,128)'
-                    outline>
+            <v-alert class='alert' :value="alert" type="info" transition="scale-transition" color='rgb(51,82,128)' outline>
                 There is no available data for this date.
             </v-alert>
         </v-dialog>
@@ -29,7 +16,6 @@
 </template>
 
 <script>
-
     import {globalStore} from "../main.js"
     import {getData} from "../getData.js";
 
@@ -37,44 +23,31 @@
 
     export default {
         name: 'Titlebar',
-        components: {
-        },
-        props:
-            {
-            },
-        created()
-        {
-            apiService = new getData(globalStore.userProfile);
+        components: {},
+        props: {},
+        created() {
+            if (! globalStore.is_mobile()) {
+                window.location.href = "http://edsonline.propulsionanalytics.com/";
+            } else {
+                apiService = new getData(globalStore.userProfile);
 
-            this.select='Last Update';
-            // console.log(globalStore);
+                this.select = 'Last Update';
 
-            var temp = Object.keys(globalStore.signals);
+                let name = this.$route.name;
 
-            if (temp.indexOf('average')>-1)
-                temp.splice(temp.indexOf('average'),1);
+                if (this.screensForBack.includes(name))
+                    this.showBreadCrumb = false;
+                else
+                    this.showBreadCrumb = true;
 
-            this.timeStamp = temp[temp.length-1];
+                if (this.breadCrumbList.includes(name)) {
+                    let index = this.breadCrumbList.indexOf(name);
 
-            let name = this.$route.name;
-
-
-
-            if (this.screensForBack.includes(name)) this.showBreadCrumb=false;
-            else this.showBreadCrumb = true;
-
-
-            if (this.breadCrumbList.includes(name))
-            {
-                let index = this.breadCrumbList.indexOf(name);
-
-                this.breadCrumbList = this.breadCrumbList.slice(0,index+1);
+                    this.breadCrumbList = this.breadCrumbList.slice(0, index + 1);
+                } else {
+                    this.breadCrumbList.push(name);
+                }
             }
-            else
-            {
-                this.breadCrumbList.push(name);
-            }
-
         },
         data () {
             return {
@@ -88,7 +61,8 @@
                 placeholder:'',
                 alert:false,
                 check:undefined,
-                showBreadCrumb:true
+                showBreadCrumb:true,
+                vesselName:''
             }
         },
         computed: {
@@ -99,52 +73,43 @@
             userLogged: function () { return globalStore.userLogged; },
             dataLoaded: function () { return globalStore.type; },
             checkedDate: function () { return globalStore.checkedDate; },
-            mapDate: function () { return globalStore.mapDate; }
+            mapDate: function () { return globalStore.mapDate; },
+            showTitle: function () {
+                var pages = [
+                    'Vessel View',
+                    'Engine Performance',
+                    'Engine Faults'
+                ];
+
+                return pages.indexOf(this.$route.name) >= 0;
+            }
         },
         watch: {
             currPath : function() {
-
                 let name = this.$route.name;
 
-                // if ((name=='Dashboard')||(name=='User Settings'))
-                // {
-                //     this.breadCrumbList =[];
-                //     this.breadCrumbList.push(name);
-                // }
-                // else
+                if (this.screensForBack.includes(name))
+                    this.showBreadCrumb=false;
+                else
+                    this.showBreadCrumb = true;
 
-                if (this.screensForBack.includes(name)) this.showBreadCrumb=false;
-                else this.showBreadCrumb = true;
-
-
-                if (this.breadCrumbList.includes(name))
-                {
+                if (this.breadCrumbList.includes(name)) {
                     let index = this.breadCrumbList.indexOf(name);
 
                     this.breadCrumbList = this.breadCrumbList.slice(0,index+1);
-                }
-                else
-                {
+                } else {
                     this.breadCrumbList.push(name);
                 }
-
             },
-            select:function()
-            {
-                if (this.select!='')
-                {
-                    if (this.select=='Select Date')
-                    {
+            select:function() {
+                if (this.select!='') {
+                    if (this.select=='Select Date') {
                         this.dialog=true;
-                    }
-                    else
-                    {
-                        // if (this.select=='Last Update') apiService.getLastUpdate(globalStore.selectedIMO);
-                        // else apiService.getToday(globalStore.selectedIMO);
-
-                        if (this.select=='Last Update') apiService.checkDate('last',globalStore.selectedIMO);
-                        else  apiService.checkDate('today',globalStore.selectedIMO);
-
+                    } else {
+                        if (this.select=='Last Update')
+                            apiService.checkDate('last',globalStore.selectedIMO);
+                        else
+                            apiService.checkDate('today',globalStore.selectedIMO);
                     }
 
                     this.placeholder = this.select;
@@ -152,102 +117,79 @@
                     this.select = '';
                 }
             },
-            selVessel:function()
-            {
+            selVessel:function() {
                 apiService.getVesselConstants(globalStore.selectedIMO);
 
-                //console.log(this.placeholder);
-
-                if (this.placeholder=='Last Update') apiService.getData('last',globalStore.selectedIMO);
-                else if (this.placeholder=='Today') apiService.getData('today',globalStore.selectedIMO);
-                else apiService.getData(this.datePicked, globalStore.selectedIMO);
-
+                if (this.placeholder=='Last Update')
+                    apiService.getData('last',globalStore.selectedIMO);
+                else if (this.placeholder=='Today')
+                    apiService.getData('today',globalStore.selectedIMO);
+                else
+                    apiService.getData(this.datePicked, globalStore.selectedIMO);
             },
-            mapDate:function()
-            {
+            mapDate:function() {
                 this.datePicked = this.mapDate;
             },
-            datePicked:function()
-            {
+            datePicked:function() {
                 apiService.checkDate(this.datePicked, globalStore.selectedIMO);
             },
-            dataLoaded : function()
-            {
-                setTimeout(() => {
-                    var temp = Object.keys(globalStore.signals);
-
-                    if (temp.length>0)
-                    {
-                        if (temp.indexOf('average')>-1)
-                            temp.splice(temp.indexOf('average'),1);
-
-                        if ((globalStore.type=='today') || (globalStore.type=='last')) this.timeStamp = temp[temp.length-1];
-                        else this.timeStamp = new Date(temp[temp.length-2]).toISOString().slice(0, 10);
-
-                    }
-
-                });
+            dataLoaded : function() {
+                if (globalStore.type!='') {
+                    if ((globalStore.type=='today') || (globalStore.type=='last'))
+                        this.timeStamp = '';
+                    else
+                        this.timeStamp = globalStore.type;
+                }
             },
-            checkedDate(check)
-            {
-                if (check)
-                {
-                    if (globalStore.validDate)
-                    {
-                        if (this.placeholder=='Select Date')
-                        {
+            checkedDate(check) {
+                if (check) {
+                    if (globalStore.validDate) {
+                        if (this.placeholder=='Select Date') {
                             apiService.getData(this.datePicked, globalStore.selectedIMO);
                             this.dialog=false;
-                        }
-                        else if (this.placeholder=='Last Update') apiService.getData('last',globalStore.selectedIMO);
-                        else  apiService.getData('today',globalStore.selectedIMO);
-                    }
-                    else {
+                        } else if (this.placeholder=='Last Update')
+                            apiService.getData('last',globalStore.selectedIMO);
+                        else
+                            apiService.getData('today',globalStore.selectedIMO);
+                    } else {
                         this.alert = true;
                     }
-
-                    // if (globalStore.validDate)
-                    // {
-                    //     apiService.getDate(this.datePicked, globalStore.selectedIMO);
-
-                    //     this.dialog=false;
-                    // }
-                    // else
-                    // {
-                    //     this.alert = true;
-                    // }
                 }
+            },
+            // '$route.params.name': {
+            '$route.name': {
+                handler: function(name) {
+                    if (name == 'Vessel View') {
+                        this.vesselName = this.$route.params.vessel;
+                    } else {
+                        this.vesselName = '';
+                    }
+                },
+                deep: true,
+                immediate: true
             }
         },
-        methods:
-            {
-                // closeAlert(v) {
-                //     this.alert = false;
-                // },
-                navTo(screen)
-                {
-                    this.$router.push( { name: screen  } )
-                },
-                goBack()
-                {
-                    this.$router.go(-1);
-                }
+        methods: {
+            navTo(screen) {
+                this.$router.push( { name: screen  } )
+            },
+            goBack() {
+                this.$router.go(-1);
             }
+        }
     }
 </script>
 
 <style scoped>
 
-#titleBar
-{
+#titleBar {
   background-color:rgb(244,244,244);
   padding:0px;
   font-size: 20px;
   color:rgb(51,82,128);
 }
 
-.titleBtn
-{
+.titleBtn {
   color:rgb(51,82,128);
   font-size:10px;
   text-transform: none;
@@ -255,8 +197,7 @@
   height:100%;
 }
 
-.timeStamp
-{
+.timeStamp {
     color:rgb(51,82,128);
     font-size:10px;
     text-transform: none;
@@ -269,17 +210,14 @@
     padding-right:10px;
     height:32px;
     margin-top:15px;
-    margin-bottom:7px;
+    margin-bottom:8px;
 }
 
-
-.v-input__slot
-{
+.v-input__slot {
     min-height:20px;
 }
 
-.alert
-{
+.alert {
     margin: 0;
     position: absolute;
     top: 50%;

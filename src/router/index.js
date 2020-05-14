@@ -12,6 +12,7 @@ import Login from '../screens/Login'
 import Alerts from '../screens/Alerts'
 import DailyReport from '../screens/DailyReport'
 import FaultsHistory from '../screens/FaultsHistory'
+import EngineFaultDetail from '../screens/EngineFaultDetail'
 
 import {globalStore} from "../main.js"
 
@@ -19,139 +20,133 @@ Vue.use(Router);
 Vue.use(VueCookies);
 
 var router = new Router({
-  mode: "history",
-  routes: [
-    {
-      path: "/",
-      // beforeEnter: (to, from, next) => {
-      //     const { uri } = to.query;
-      //     if (uri != null && uri != '/') {
-      //         next(false);
-      //         router.push(uri);
-      //     } else {
-      //         next();
-      //     }
-      // },
-      redirect: {
-        name:"Login"
-        //name: "Report"
-      }
-    },
-    {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: Dashboard,
-      // beforeEnter: (to, from, next) => {
-      //       const { uri } = to.query;
-      //       if (uri != null && uri != '/') {
-      //           next(false);
-      //           router.push(uri);
-      //       } else {
-      //           next();
-      //       }
-      //   },
-    },
-    {
-      path: '/vessel-view/:vessel',
-      name: 'Vessel View',
-      component: VesselView,
-      beforeEnter: (to, from, next) => {
-            if (globalStore.selectedVessel=='') {
-                next(false);
-                router.push('/dashboard');
-            } else {
-                next();
-            }
-        }
-    },
-    {
-      path: '/engine-faults/',
-      name: 'Engine Faults',
-      component: EngineFaults,
-      children: [
+    mode: "history",
+    routes: [
         {
-          path: ':id',
-          component: EngineFaults,
-          name: ''
+            path: "/",
+            redirect: {
+                name: "Login"
+            }
         },
+        {
+            path: '/dashboard',
+            name: 'Dashboard',
+            component: Dashboard,
+        },
+        {
+            path: '/vessel-view/:vessel',
+            name: 'Vessel View',
+            component: VesselView,
+            beforeEnter: (to, from, next) => {
+                if (globalStore.selectedVessel == '') {
+                    next(false);
+                    router.push('/dashboard');
+                } else {
+                    next();
+                }
+            }
+        },
+        {
+            path: '/engine-faults/',
+            name: 'Engine Faults',
+            component: EngineFaults,
+            children: [
+                {
+                    path: ':id',
+                    component: EngineFaults,
+                    name: ''
+                },
 
-      ],
-      beforeEnter: (to, from, next) => {
-        if (globalStore.selectedVessel=='') {
-            next(false);
-            router.push('/dashboard');
-        } else {
-            next();
+            ],
+            beforeEnter: (to, from, next) => {
+                if (globalStore.selectedVessel == '') {
+                    next(false);
+                    router.push('/dashboard');
+                } else {
+                    next();
+                }
+            }
+        },
+        {
+            path: '/engine-fault-detail',
+            name: 'Engine Fault Detail',
+            component: EngineFaultDetail,
+        },
+        {
+            path: '/faults-history/:id',
+            name: 'Faults History',
+            component: FaultsHistory
+        },
+        {
+            path: '/engine-performance',
+            name: 'Engine Performance',
+            component: EnginePerformance,
+            beforeEnter: (to, from, next) => {
+                if (globalStore.selectedVessel == '') {
+                    next(false);
+                    router.push('/dashboard');
+                } else {
+                    next();
+                }
+            }
+        },
+        {
+            path: '/user-settings',
+            name: 'Settings',
+            component: UserSettings
+        },
+        {
+            path: '/login',
+            name:
+                'Login',
+            component: Login,
+        },
+        {
+            path: '/register',
+            name:
+                'Register',
+            component: Register,
+        },
+        {
+            path: '/alerts',
+            name:
+                'Alerts',
+            component: Alerts,
+        },
+        {
+            path: '/report',
+            name:
+                'Report',
+            component: DailyReport,
         }
-    }
-    },
-    {
-      path: '/faults-history/:id',
-      name: 'Faults History',
-      component: FaultsHistory
-    },
-    {
-      path: '/engine-performance',
-      name: 'Engine Performance',
-      component: EnginePerformance,
-      beforeEnter: (to, from, next) => {
-        if (globalStore.selectedVessel=='') {
-            next(false);
-            router.push('/dashboard');
-        } else {
-            next();
-        }
-    }
-    },
-    {
-      path: '/user-settings',
-      name: 'Settings',
-      component: UserSettings
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: Login,
-    },
-    {
-      path: '/register',
-      name: 'Register',
-      component: Register,
-    },
-    {
-      path: '/alerts',
-      name: 'Alerts',
-      component: Alerts,
-    },
-    {
-      path: '/report',
-      name: 'Report',
-      component: DailyReport,
-      beforeEnter: (to, from, next) => {
-        if (globalStore.selectedVessel=='') {
-            next(false);
-            router.push('/dashboard');
-        } else {
-            next();
-        }
-    }
-    }
-  ]
+    ]
 });
 
-router.beforeEach((to, from, next) => {  
-  // console.log(window.$cookies.isKey('user'));
-  // console.log('from ' +from.path);
-  // console.log('before ' +to.path);
-  if (to.path=='/login')
-  {
-    if (window.$cookies.isKey('user')) next('/dashboard');
-    else next();
-  }  
-  else {
-    if (!window.$cookies.isKey('user')) next('/login');
-    else next();
-  }
+router.beforeEach((to, from, next) => {
+    let params = window.location.search.replace(/^\?/,'').split('&');
+
+    if (params.length) {
+        var vessel = new RegExp('^vessel');
+
+        for (var i in params) {
+            if (params.hasOwnProperty(i)) {
+                if (vessel.test(params[i])) {
+                    var param = params[i].replace(vessel,'').replace(/^=/,'');
+
+                    window.$cookies.set('request-vessel', decodeURI(param));
+                }
+            }
+        }
+    }
+
+    if (to.path == '/login') {
+        if (window.$cookies.isKey('user')) next('/dashboard');
+        else next();
+    }
+    else {
+        if (!window.$cookies.isKey('user')) next('/login');
+        else next();
+    }
 })
 
 
