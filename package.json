@@ -15,7 +15,7 @@
     "highcharts": "^7.1.1",
     "highcharts-vue": "^1.2.0",
     "html2canvas": "^1.0.0-rc.1",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.5.1",
     "mapbox-gl": "^1.0.0",
     "mobile-detect": "^1.4.4",
     "vue": "^2.6.6",
